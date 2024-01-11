@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "660495091768",
+    "firebase_url": "https://real-estate-kotlin-fd5c0-default-rtdb.firebaseio.com",
+    "project_id": "real-estate-kotlin-fd5c0",
+    "storage_bucket": "real-estate-kotlin-fd5c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660495091768:android:90c57452e659c9d5e87ecd",
+        "android_client_info": {
+          "package_name": "com.example.real_estate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660495091768-q3hg2dkmru2uk2e5v40skbdkt9o1gkuv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.real_estate",
+            "certificate_hash": "017327ee8d075e4c3c0bb6ec483fe469eeea0882"
+          }
+        },
+        {
+          "client_id": "660495091768-uu2mv303v6agjhhsn99of52t6b5p7mqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8pn7fbaDSVJJWSXX8q4GQlJ9Xk2DA8_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660495091768-uu2mv303v6agjhhsn99of52t6b5p7mqf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
