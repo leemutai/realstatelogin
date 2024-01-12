@@ -86,7 +86,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email"
-                android:minHeight="@dimen/m_button_height"/>
+                android:minHeight="@dimen/m_button_height"
+                app:icon="@drawable/baseline_phone_24"
+                android:layout_margin="5dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginGoogleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Google"
+                app:icon="@drawable/google_white"
+                android:minHeight="@dimen/m_button_height"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                />
 
             <!-- Add your views inside this LinearLayout if needed -->
         </LinearLayout>
