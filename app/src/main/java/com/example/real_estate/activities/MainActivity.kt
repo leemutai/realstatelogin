@@ -1,8 +1,9 @@
-package com.example.real_estate
+package com.example.real_estate.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.real_estate.R
 import com.example.real_estate.databinding.ActivityMainBinding
 import com.example.real_estate.fragments.BlankHomeFragment
 import com.example.real_estate.fragments.ChatsListFragment
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val LOGIN_REQUEST_CODE = 101 // You can use any unique code
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //by default (when app open ) show homeFragment
+        // by default (when app open) show homeFragment
         showBlankHomeFragment()
 
         // Initialize Firebase Authentication
@@ -63,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBlankHomeFragment(){
+    private fun showBlankHomeFragment() {
         binding.toolbarTitleTv.text = "Home"
 
         val blankHomeFragment = BlankHomeFragment()
@@ -72,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun showChatsListFragment(){
+    private fun showChatsListFragment() {
         binding.toolbarTitleTv.text = "Chats"
 
         val chatsListFragment = ChatsListFragment()
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun showFavoriteListFragment(){
+    private fun showFavoriteListFragment() {
         binding.toolbarTitleTv.text = "Favorites"
 
         val favoriteListFragment = FavoriteListFragment()
@@ -90,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun showProfileListFragment(){
+    private fun showProfileListFragment() {
         binding.toolbarTitleTv.text = "Profile"
 
         val profileFragment = ProfileFragment()
@@ -99,15 +102,24 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
-
-
-
-
     private fun startLoginOptionsActivity() {
-        // Start the login options activity
-        startActivity(Intent(this, LoginOptionsActivity::class.java))
-        // Finish the current activity
-        finish()
+        // Start the login options activity with startActivityForResult
+        startActivityForResult(Intent(this, LoginOptionsActivity::class.java), LOGIN_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Check if the result is from the LoginOptionsActivity
+        if (requestCode == LOGIN_REQUEST_CODE) {
+            // Check if the login was successful or not (you can customize this based on your logic)
+            if (resultCode == RESULT_OK) {
+                // Handle successful login
+            } else {
+                // Handle unsuccessful login or skip
+                // For now, we'll just show the home fragment
+                showBlankHomeFragment()
+            }
+        }
     }
 }

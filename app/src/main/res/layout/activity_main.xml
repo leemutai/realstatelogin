@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <!--    RelativeLayout: Toolbar Title-->
     <RelativeLayout
         android:id="@+id/toolbarRl"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/m_toolbar_height">
+        android:layout_height="@dimen/m_toolbar_height"
+        android:background="@drawable/toolbar_bg_01">
       <!--TextView: Toolbar Title-->
         <TextView
             android:id="@+id/toolbarTitleTv"
