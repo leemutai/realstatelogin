@@ -60,6 +60,7 @@ class LoginOptionsActivity : AppCompatActivity() {
         }
     }
 
+
     private fun beginLoginBtn() {
         Log.d(TAG, "beginLoginBtn:")
 

@@ -38,6 +38,9 @@ class LoginEmailActivity : AppCompatActivity() {
         binding.loginBtn.setOnClickListener {
             validateData()
         }
+        binding.noAccountTv.setOnClickListener {
+            startActivity(Intent(this, RegisterEmailActivity::class.java))
+        }
     }
 
     private fun validateData() {
