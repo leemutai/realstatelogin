@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.real_estate.LoginPhoneActivity
 import com.example.real_estate.MyUtils
 import com.example.real_estate.R
 import com.example.real_estate.databinding.ActivityLoginOptionsBinding
@@ -57,6 +58,11 @@ class LoginOptionsActivity : AppCompatActivity() {
 
         binding.loginEmailBtn.setOnClickListener {
             startActivity(Intent(this, LoginEmailActivity::class.java))
+        }
+
+        //handle loginEmail click,start login phonePhone activity
+        binding.loginPhoneBtn.setOnClickListener {
+            startActivity(Intent(this,LoginPhoneActivity::class.java))
         }
     }
 
