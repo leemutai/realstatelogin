@@ -41,6 +41,12 @@ class LoginEmailActivity : AppCompatActivity() {
         binding.noAccountTv.setOnClickListener {
             startActivity(Intent(this, RegisterEmailActivity::class.java))
         }
+
+        //handle forgot passwordTv click, open ForgotPasswordActivity to send password recovery intructions to registered email
+        binding.forgotPasswordTv.setOnClickListener {
+            startActivity(Intent(this,ForgotPasswordActivity::class.java))
+
+        }
     }
 
     private fun validateData() {
