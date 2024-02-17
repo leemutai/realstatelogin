@@ -5,9 +5,9 @@ import android.widget.Toast
 
 object MyUtils {
 
-    const val USER_TYPE_GOOGLE = "Google"
-    const val USER_TYPE_EMAIL = "Email"
-    const val USER_TYPE_PHONE = "Phone"
+    const val USER_TYPE_GOOGLE = "Google" //if user created account using google Login/SignIn method
+    const val USER_TYPE_EMAIL = "Email"//if user created account using email method
+    const val USER_TYPE_PHONE = "Phone"// if user creates account using phone Login/SignIn
 
     fun toast(context: Context, message: String){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

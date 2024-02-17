@@ -15,6 +15,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
+import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.TimeUnit
 
 class LoginPhoneActivity : AppCompatActivity() {
@@ -22,8 +23,8 @@ class LoginPhoneActivity : AppCompatActivity() {
     private lateinit var binding:ActivityLoginPhoneBinding
     //tag to show logs in logcat
     private val TAG = "LOGIN_PHONE_TAG"
-    //progressdialog to show while phonelogin, savng user info
-    private lateinit var progessDialog: ProgressDialog
+    //progress-dialog to show while phone login, saving user info
+    private lateinit var progressDialog: ProgressDialog
     //firebase auth for auth related tasks
     private lateinit var firebaseAuth: FirebaseAuth
 
@@ -34,7 +35,7 @@ class LoginPhoneActivity : AppCompatActivity() {
     private var mVerificationId:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //activity phone loging.xml = ActivityLoginPhoneBinding
+        //activity phone logging.xml = ActivityLoginPhoneBinding
         binding = ActivityLoginPhoneBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //for the start show phone input ui and hide otp ui
@@ -42,11 +43,12 @@ class LoginPhoneActivity : AppCompatActivity() {
         binding.otpInputRl.visibility = View.GONE
 
         //init/setup progressDialog to show while login
-        progessDialog = ProgressDialog(this)
-        progessDialog.setTitle("please wait")
-        progessDialog.setCanceledOnTouchOutside(false)
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("please wait")
+        progressDialog.setCanceledOnTouchOutside(false)
 
         firebaseAuth = FirebaseAuth.getInstance()
+
         phoneLoginCallBack()
 
         //HABDLE TOOOLBARBACK clicks, go back
@@ -96,21 +98,21 @@ class LoginPhoneActivity : AppCompatActivity() {
         phoneNumber = binding.phoneNumberEt.text.toString().trim()
         phoneNumberWithCode = phoneCode + phoneNumber
 
-        Log.d(TAG,"validateData:Phone Code $phoneCode")
-        Log.d(TAG,"validateData:Phone Number $phoneNumber")
-        Log.d(TAG,"validateData:Phone Number With Code $phoneNumberWithCode")
+        Log.d(TAG,"validateData:Phone Code: $phoneCode")
+        Log.d(TAG,"validateData:Phone Number: $phoneNumber")
+        Log.d(TAG,"validateData:Phone Number With Code: $phoneNumberWithCode")
 
         if (phoneNumber.isEmpty()){
             binding.phoneNumberEt.error = "Enter Phone Number"
             binding.phoneNumberEt.requestFocus()
         }else {
-
+            startPhoneNumberVerification()
         }
     }
     private fun startPhoneNumberVerification(){
         //show progress
-        progessDialog.setMessage("Sending OTP to $phoneNumberWithCode")
-        progessDialog.show()
+        progressDialog.setMessage("Sending OTP to $phoneNumberWithCode")
+        progressDialog.show()
         val options = PhoneAuthOptions.newBuilder(firebaseAuth)
             .setPhoneNumber(phoneNumberWithCode)
             .setTimeout(60L,TimeUnit.SECONDS)
@@ -122,8 +124,8 @@ class LoginPhoneActivity : AppCompatActivity() {
     }
 
     private fun resendVerificationCode(){
-        progessDialog.setMessage("Sending OTP to $phoneNumberWithCode")
-        progessDialog.show()
+        progressDialog.setMessage("Sending OTP to $phoneNumberWithCode")
+        progressDialog.show()
         val options = PhoneAuthOptions.newBuilder(firebaseAuth)
             .setPhoneNumber(phoneNumberWithCode)
             .setTimeout(60L,TimeUnit.SECONDS)
@@ -137,8 +139,8 @@ class LoginPhoneActivity : AppCompatActivity() {
 
     private fun verifyPhoneNumberWithCode(otp:String){
         Log.d(TAG,"verifyPhoneNumberWithCode: OTP: $otp")
-        progessDialog.setMessage("verifying OTP...")
-        progessDialog.show()
+        progressDialog.setMessage("verifying OTP...")
+        progressDialog.show()
 
         val credential = PhoneAuthProvider.getCredential(mVerificationId!!, otp)
         signInWithPhoneAuthCredential(credential)
@@ -157,7 +159,7 @@ class LoginPhoneActivity : AppCompatActivity() {
                 mVerificationId = verificationId
                 forceResendingToken = token
 
-                progessDialog.dismiss()
+                progressDialog.dismiss()
 
                 binding.phoneInputRl.visibility = View.GONE
                 binding.otpInputRl.visibility = View.VISIBLE
@@ -178,7 +180,7 @@ class LoginPhoneActivity : AppCompatActivity() {
                 Log.e(TAG,"onVerificationFailed",e)
                 //this callback is invoked if an invalid request for verification is made
                 //for instance if the phone numbet format is not valid
-                progessDialog.dismiss()
+                progressDialog.dismiss()
                 MyUtils.toast(this@LoginPhoneActivity,"Failed to verify due to ${e.message}")
 
             }
@@ -189,8 +191,8 @@ class LoginPhoneActivity : AppCompatActivity() {
         Log.d(TAG,"signInWithPhoneAuthCredential: ")
 
         //shw progress
-        progessDialog.setMessage("Logging In...")
-        progessDialog.show()
+        progressDialog.setMessage("Logging In...")
+        progressDialog.show()
         //sign in to firebase autj using phone credentials
         firebaseAuth.signInWithCredential(credential)
             .addOnSuccessListener {authResult ->
@@ -210,7 +212,7 @@ class LoginPhoneActivity : AppCompatActivity() {
             }
             .addOnFailureListener {e->
                 Log.e(TAG,"signInWithPhoneAuthCredential: ",e)
-                progessDialog.dismiss()
+                progressDialog.dismiss()
                 MyUtils.toast(this,"Login Failed due to ${e.message}")
             }
     }
@@ -219,11 +221,41 @@ class LoginPhoneActivity : AppCompatActivity() {
         Log.d(TAG,"updateUserInfo: ")
 
         //show progress
-        progessDialog.setMessage("Saving User Info...")
-        progessDialog.show()
+        progressDialog.setMessage("Saving User Info...")
+        progressDialog.show()
 
         val timestamp = MyUtils.timestamp()
         val registeredUserUid = firebaseAuth.uid
+
+        val hashMap = HashMap<String,Any>()
+        hashMap["uid"] = registeredUserUid!!
+        hashMap["email"] = ""
+        hashMap["name"] = ""
+        hashMap["timestamp"] = timestamp
+        hashMap["phoneCode"] = phoneCode
+        hashMap["phoneNumber"] = phoneNumber
+        hashMap["profileImageUrl"] = ""
+        hashMap["dob"] = ""
+        hashMap["userType"] = MyUtils.USER_TYPE_PHONE //possible values Email/phone/Google
+        hashMap["token"] =  "" //FCM token send push notifications
+
+        //set data to firebase db
+        val ref = FirebaseDatabase.getInstance().getReference("Users")
+        ref.child(registeredUserUid!!)
+            .setValue(hashMap)
+            .addOnSuccessListener {
+                Log.d(TAG,"updateUserInfo: User Info saved...")
+                progressDialog.dismiss()
+
+
+                startActivity(Intent(this,MainActivity::class.java))
+                finishAffinity()
+            }
+            .addOnFailureListener {e->
+                Log.e(TAG,"updateUserInfo:", e)
+                progressDialog.dismiss()
+                MyUtils.toast(this,"Failed to save due to ${e.message}")
+            }
 
     }
 }
