@@ -3,6 +3,7 @@ package com.example.real_estate.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.real_estate.MyUtils
 import com.example.real_estate.R
 import com.example.real_estate.databinding.ActivityMainBinding
 import com.example.real_estate.fragments.BlankHomeFragment
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Handle bottomNavigationView item clicks to navigate between fragments
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+        binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             // Get id of the menu item clicked
             val itemId = menuItem.itemId
 
@@ -46,23 +47,51 @@ class MainActivity : AppCompatActivity() {
                 R.id.item_home -> {
                     // Handle home fragment
                     showBlankHomeFragment()
+                    return@setOnItemSelectedListener true
+
                 }
                 R.id.item_chats -> {
                     // Handle chats fragment
-                    showChatsListFragment()
+
+
+                    if(firebaseAuth.currentUser == null){
+                        MyUtils.toast(this,"Login Required...")
+                        return@setOnItemSelectedListener false
+                    } else{
+                        showChatsListFragment()
+                        return@setOnItemSelectedListener true
+                    }
                 }
                 R.id.item_favorite -> {
                     // Handle favorite fragment
-                    showFavoriteListFragment()
+
+
+                    if(firebaseAuth.currentUser == null){
+                        MyUtils.toast(this,"Login Required...")
+                        return@setOnItemSelectedListener false
+                    } else{
+                        showFavoriteListFragment()
+                        return@setOnItemSelectedListener true
+                    }
                 }
                 R.id.item_profile -> {
                     // Handle profile fragment
-                    showProfileListFragment()
+
+
+                    if(firebaseAuth.currentUser == null){
+                        MyUtils.toast(this,"Login Required...")
+                        return@setOnItemSelectedListener false
+                    } else{
+                        showProfileListFragment()
+                        return@setOnItemSelectedListener true
+                    }
+                }
+                else ->{
+                    return@setOnItemSelectedListener false
                 }
             }
 
             // Return true to indicate the item is selected
-            true
         }
     }
 

@@ -3,4 +3,8 @@
     <dimen name="m_toolbar_height">55dp </dimen>
 
     <dimen name="m_button_height">60dp </dimen>
+    <dimen name="_17pxh" />
+    <dimen name="_15pxh" />
+    <dimen name="_10pxh" />
+    <dimen name="_12pxh" />
 </resources>
