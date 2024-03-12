@@ -60,6 +60,8 @@ dependencies {
     //Country code picker
     implementation ("com.hbb20:ccp:2.7.0")
 
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+
 
 
     testImplementation("junit:junit:4.13.2")
