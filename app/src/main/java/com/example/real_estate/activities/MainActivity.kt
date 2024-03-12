@@ -1,5 +1,6 @@
 package com.example.real_estate.activities
 
+import ProfileFragment
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import com.example.real_estate.databinding.ActivityMainBinding
 import com.example.real_estate.fragments.BlankHomeFragment
 import com.example.real_estate.fragments.ChatsListFragment
 import com.example.real_estate.fragments.FavoriteListFragment
-import com.example.real_estate.fragments.ProfileFragment
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
